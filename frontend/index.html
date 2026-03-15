@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anupalan Mitra | ISO Compliance Intelligence</title>
+  <meta name="description" content="Big4-grade ISO compliance assessment platform. Upload company documents and get an instant readiness report.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:          #0a0e1a;
+      --bg2:         #0f1526;
+      --card:        rgba(255,255,255,0.04);
+      --border:      rgba(255,255,255,0.09);
+      --accent:      #3b82f6;
+      --accent2:     #8b5cf6;
+      --green:       #22c55e;
+      --amber:       #f59e0b;
+      --red:         #ef4444;
+      --text:        #f1f5f9;
+      --muted:       #64748b;
+      --radius:      14px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Background blobs ── */
+    .blobs { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(90px); opacity: 0.18;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 600px; height: 600px; background: var(--accent); top: -150px; left: -150px; animation-delay: 0s; }
+    .blob-2 { width: 500px; height: 500px; background: var(--accent2); bottom: -100px; right: -100px; animation-delay: -6s; }
+    @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(40px,30px) scale(1.08); } }
+
+    /* ── Nav ── */
+    nav {
+      position: relative; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px;
+      border-bottom: 1px solid var(--border);
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 1.2rem; font-weight: 700; letter-spacing: -0.02em;
+    }
+    .brand svg { color: var(--accent); }
+    .badge {
+      font-size: 0.7rem; font-weight: 600; padding: 3px 10px;
+      background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3);
+      border-radius: 20px; color: #93c5fd; letter-spacing: 0.05em;
+    }
+
+    /* ── Main layout ── */
+    main {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    /* ── Hero ── */
+    .hero { text-align: center; margin-bottom: 52px; }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+      color: #93c5fd;
+      background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25);
+      padding: 5px 14px; border-radius: 20px; margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800;
+      line-height: 1.18; letter-spacing: -0.03em;
+      margin-bottom: 18px;
+    }
+    .gradient { background: linear-gradient(135deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .hero p { font-size: 1.05rem; color: var(--muted); max-width: 620px; margin: 0 auto; line-height: 1.65; }
+
+    /* ── Steps strip ── */
+    .steps {
+      display: flex; gap: 0; margin-bottom: 40px;
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .step {
+      flex: 1; display: flex; align-items: center; gap: 12px;
+      padding: 16px 20px;
+      border-right: 1px solid var(--border);
+      transition: background 0.2s;
+    }
+    .step:last-child { border-right: none; }
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+      background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3); color: #93c5fd;
+    }
+    .step-text { font-size: 0.8rem; font-weight: 500; color: var(--muted); line-height: 1.35; }
+    .step-text strong { color: var(--text); display: block; font-size: 0.85rem; }
+
+    /* ── Card ── */
+    .card {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 32px;
+    }
+    .section-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 12px;
+    }
+
+    /* ── Framework select ── */
+    .framework-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 28px;
+    }
+    .framework-opt {
+      position: relative; cursor: pointer;
+    }
+    .framework-opt input[type="radio"] {
+      position: absolute; opacity: 0; width: 0; height: 0;
+    }
+    .framework-opt label {
+      display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px;
+      border: 1.5px solid var(--border); border-radius: 10px;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .framework-opt label:hover { border-color: rgba(59,130,246,0.4); background: rgba(59,130,246,0.04); }
+    .framework-opt input:checked + label {
+      border-color: var(--accent); background: rgba(59,130,246,0.08);
+    }
+    .fw-icon {
+      width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+      background: rgba(59,130,246,0.1);
+    }
+    .fw-info { flex: 1; }
+    .fw-code { font-size: 0.8rem; font-weight: 700; color: #93c5fd; }
+    .fw-name { font-size: 0.82rem; color: var(--text); font-weight: 500; margin-top: 1px; }
+    .fw-desc { font-size: 0.74rem; color: var(--muted); margin-top: 3px; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+    /* ── Upload zone ── */
+    .upload-zone {
+      border: 2px dashed var(--border); border-radius: 12px;
+      padding: 32px 24px; text-align: center; cursor: pointer;
+      transition: all 0.2s; position: relative;
+    }
+    .upload-zone:hover, .upload-zone.drag-over {
+      border-color: var(--accent); background: rgba(59,130,246,0.04);
+    }
+    .upload-zone input[type="file"] {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer;
+    }
+    .upload-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .upload-zone h3 { font-size: 1rem; font-weight: 600; margin-bottom: 6px; }
+    .upload-zone p { font-size: 0.83rem; color: var(--muted); }
+
+    /* ── Document slots ── */
+    .doc-slots {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px;
+    }
+    .doc-slot {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-radius: 8px;
+      border: 1px solid var(--border); background: rgba(255,255,255,0.02);
+      min-height: 52px;
+    }
+    .doc-slot.filled { border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.06); }
+    .slot-icon { font-size: 1.3rem; flex-shrink: 0; }
+    .slot-label { font-size: 0.78rem; font-weight: 500; color: var(--muted); }
+    .slot-file  { font-size: 0.78rem; font-weight: 600; color: var(--green); }
+    .slot-remove { margin-left: auto; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 1rem; padding: 2px 6px; border-radius: 4px; }
+    .slot-remove:hover { color: var(--red); background: rgba(239,68,68,0.1); }
+
+    /* ── File list (overflow > 4) ── */
+    .file-list { margin-top: 12px; display: flex; flex-direction: column; gap: 6px; }
+    .file-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 8px 14px; border-radius: 8px; background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border); font-size: 0.82rem;
+    }
+
+    /* ── Notice ── */
+    .notice {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 12px 16px; border-radius: 10px; margin-top: 16px;
+      background: rgba(34,197,94,0.07); border: 1px solid rgba(34,197,94,0.2);
+      font-size: 0.82rem; color: #86efac; line-height: 1.5;
+    }
+    .notice b { color: #4ade80; }
+
+    /* ── Run button ── */
+    .run-btn {
+      width: 100%; margin-top: 28px; padding: 16px;
+      font-size: 1rem; font-weight: 700; letter-spacing: 0.01em;
+      border: none; border-radius: 10px; cursor: pointer;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: white; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .run-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 30px rgba(59,130,246,0.35); }
+    .run-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── Loading overlay ── */
+    .loading {
+      display: none; flex-direction: column; align-items: center; justify-content: center;
+      padding: 60px 32px; text-align: center;
+    }
+    .spinner {
+      width: 52px; height: 52px; border-radius: 50%;
+      border: 3px solid rgba(59,130,246,0.15);
+      border-top-color: var(--accent);
+      animation: spin 0.9s linear infinite; margin-bottom: 24px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 8px; }
+    .loading-sub { font-size: 0.85rem; color: var(--muted); }
+    .loading-steps { margin-top: 24px; text-align: left; width: 100%; max-width: 320px; }
+    .lstep { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 0.83rem; color: var(--muted); }
+    .lstep.done { color: var(--green); }
+    .lstep.active { color: var(--text); }
+    .lstep-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<div class="blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+</div>
+
+<nav>
+  <div class="brand">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Anupalan Mitra
+  </div>
+  <span class="badge">&#9679; BIG4-GRADE ASSESSMENT</span>
+</nav>
+
+<main>
+  <div class="hero">
+    <div class="hero-tag">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+      Powered by Gemini 2.5 Flash + ISO Knowledge Base
+    </div>
+    <h1>ISO Compliance <span class="gradient">Readiness Assessment</span></h1>
+    <p>Upload your organisation's complete policy ecosystem. The platform assesses all documents together — exactly how Big4 auditors review compliance.</p>
+  </div>
+
+  <!-- 4-step strip -->
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-text"><strong>Upload Docs</strong>Upload all organisation policy documents (up to 4)</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-text"><strong>Select Standard</strong>Choose the ISO framework to assess against</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-text"><strong>Run Assessment</strong>AI reviews all documents as a unified corpus</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-text"><strong>Get Report</strong>Score · Gap register · Evidence map · Actions</div>
+    </div>
+  </div>
+
+  <!-- Main card -->
+  <div class="card" id="uploadCard">
+
+    <!-- Framework selector -->
+    <div class="section-label">Step 2 — Target ISO framework</div>
+    <div class="framework-grid">
+      <div class="framework-opt">
+        <input type="radio" name="framework" id="fw37001" value="iso37001">
+        <label for="fw37001">
+          <div class="fw-icon">⚖️</div>
+          <div class="fw-info">
+            <div class="fw-code">ISO 37001</div>
+            <div class="fw-name">Anti-bribery Management</div>
+            <div class="fw-desc">ABMS · Leadership · Due diligence</div>
+          </div>
+        </label>
+      </div>
+      <div class="framework-opt">
+        <input type="radio" name="framework" id="fw37002" value="iso37002">
+        <label for="fw37002">
+          <div class="fw-icon">🔔</div>
+          <div class="fw-info">
+            <div class="fw-code">ISO 37002</div>
+            <div class="fw-name">Whistleblowing Management</div>
+            <div class="fw-desc">WMS · Reporter protection · Channels</div>
+          </div>
+        </label>
+      </div>
+      <div class="framework-opt">
+        <input type="radio" name="framework" id="fw37301" value="iso37301">
+        <label for="fw37301">
+          <div class="fw-icon">🛡️</div>
+          <div class="fw-info">
+            <div class="fw-code">ISO 37301</div>
+            <div class="fw-name">Compliance Management</div>
+            <div class="fw-desc">CMS · Risk assessment · Obligations</div>
+          </div>
+        </label>
+      </div>
+      <div class="framework-opt">
+        <input type="radio" name="framework" id="fw37000" value="iso37000">
+        <label for="fw37000">
+          <div class="fw-icon">🏛️</div>
+          <div class="fw-info">
+            <div class="fw-code">ISO 37000</div>
+            <div class="fw-name">Governance of Organizations</div>
+            <div class="fw-desc">Board · Strategy · Accountability</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Upload zone -->
+    <div class="section-label">Step 1 — Organisation documents (upload all at once)</div>
+    <div class="upload-zone" id="dropZone">
+      <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx">
+      <div class="upload-icon">📂</div>
+      <h3>Drag &amp; drop all policy documents here</h3>
+      <p>Anti-Bribery Policy · Code of Conduct · Governance Report · Whistleblowing Policy</p>
+      <p style="margin-top:6px;font-size:0.76rem">Supports PDF, DOCX &nbsp;·&nbsp; Up to 4 documents</p>
+    </div>
+
+    <!-- Slot grid — shows up to 4 labelled document slots -->
+    <div class="doc-slots" id="docSlots">
+      <div class="doc-slot" id="slot0"><span class="slot-icon">📄</span><span class="slot-label">Document 1</span></div>
+      <div class="doc-slot" id="slot1"><span class="slot-icon">📄</span><span class="slot-label">Document 2</span></div>
+      <div class="doc-slot" id="slot2"><span class="slot-icon">📄</span><span class="slot-label">Document 3</span></div>
+      <div class="doc-slot" id="slot3"><span class="slot-icon">📄</span><span class="slot-label">Document 4</span></div>
+    </div>
+
+    <!-- Notice -->
+    <div class="notice">
+      ✅ &nbsp;<div><b>Consolidated assessment:</b> All uploaded documents are analysed together as a single policy ecosystem — the same approach used by Deloitte, PwC, EY, and KPMG for ISO compliance audits.</div>
+    </div>
+
+    <!-- Run button -->
+    <button class="run-btn" id="runBtn" disabled>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      Run Consolidated Assessment
+    </button>
+
+    <!-- Loading state -->
+    <div class="loading" id="loadingState">
+      <div class="spinner"></div>
+      <h3>Running Assessment</h3>
+      <p class="loading-sub" id="loadingMsg">Uploading documents to backend…</p>
+      <div class="loading-steps">
+        <div class="lstep" id="ls1"><div class="lstep-dot"></div>Parsing policy documents</div>
+        <div class="lstep" id="ls2"><div class="lstep-dot"></div>Retrieving ISO clause references</div>
+        <div class="lstep" id="ls3"><div class="lstep-dot"></div>Gemini AI batch scoring all clauses</div>
+        <div class="lstep" id="ls4"><div class="lstep-dot"></div>Building gap register &amp; evidence map</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>

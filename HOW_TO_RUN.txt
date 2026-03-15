@@ -1,0 +1,229 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║            ANUPALAN MITRA — Compliance Intelligence Platform                ║
+║              Powered by Google Gemini 2.5 Flash + ChromaDB                 ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+PROJECT STRUCTURE
+─────────────────
+Anupalan_Mitra/
+├── frontend/
+│   ├── index.html              ← Upload portal (open this in browser)
+│   ├── dashboard.html          ← Results & analytics dashboard
+│   ├── css/
+│   │   ├── variables.css       ← Design tokens & color palette
+│   │   ├── main.css            ← Global styles & animations
+│   │   └── components.css      ← Cards, buttons, drag-drop zone
+│   └── js/
+│       ├── app.js              ← UI logic & dashboard rendering
+│       └── api.js              ← Backend API calls & polling
+└── backend/
+    ├── .env                    ← 🔑 YOUR API KEY GOES HERE
+    ├── main.py                 ← FastAPI server (entry point)
+    ├── requirements.txt        ← Python dependencies
+    ├── knowledge_base_loader.py← One-time ISO PDF indexer
+    ├── knowledge_base/         ← ISO 37000, 37001, 37002, 37301 PDFs
+    ├── chroma_db/              ← Auto-created vector store (after step 3)
+    └── services/
+        └── rag_engine.py       ← Gemini + ChromaDB RAG pipeline
+
+
+══════════════════════════════════════════════════════════════════════════════
+ PREREQUISITES
+══════════════════════════════════════════════════════════════════════════════
+
+  • Python 3.10 or higher       → https://www.python.org/downloads/
+  • A Google Gemini API key     → https://aistudio.google.com/app/apikey
+  • A modern web browser        (Chrome, Edge, Firefox)
+
+
+══════════════════════════════════════════════════════════════════════════════
+ STEP 1 — Add Your Gemini API Key
+══════════════════════════════════════════════════════════════════════════════
+
+  Open the file:
+      backend/.env
+
+  Replace the placeholder with your real key:
+      GOOGLE_API_KEY=AIzaSy...your_actual_key_here...
+
+  ⚠  NEVER share this file or commit it to GitHub.
+     It is already listed in backend/.gitignore for your protection.
+
+
+══════════════════════════════════════════════════════════════════════════════
+ STEP 2 — Install Python Dependencies  (run ONCE)
+══════════════════════════════════════════════════════════════════════════════
+
+  Open a terminal inside the backend/ folder, then run:
+
+      pip install -r requirements.txt
+
+  Packages installed:
+      fastapi, uvicorn, google-generativeai, chromadb,
+      pdfplumber, python-dotenv, python-multipart
+
+
+══════════════════════════════════════════════════════════════════════════════
+ STEP 3 — Index the ISO Knowledge Base  (run ONCE)
+══════════════════════════════════════════════════════════════════════════════
+
+  This step reads all PDFs in knowledge_base/ and builds the ChromaDB
+  vector store that Gemini uses to retrieve ISO clause references.
+
+  From inside the backend/ folder, run:
+
+      python knowledge_base_loader.py
+
+  Expected output:
+      Found 4 PDFs – indexing into ChromaDB …
+      [ISO 37001 (Anti-bribery...)] → N chunks
+      [ISO 37002 (Whistleblowing...)] → N chunks
+      [ISO 37301 (Compliance...)] → N chunks
+      [ISO 37000 (Governance...)] → N chunks
+      ✅ Indexed XXXX chunks into ChromaDB at '...chroma_db'
+
+  A new folder called chroma_db/ will appear inside backend/.
+  You only need to re-run this if you add new PDFs to knowledge_base/.
+
+
+══════════════════════════════════════════════════════════════════════════════
+ STEP 4 — Start the Backend Server
+══════════════════════════════════════════════════════════════════════════════
+
+  From inside the backend/ folder, run:
+
+      python main.py
+
+  You should see:
+      INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+
+  Keep this terminal open while using the app.
+
+  Optional — API documentation (Swagger UI):
+      http://localhost:8000/docs
+
+
+══════════════════════════════════════════════════════════════════════════════
+ STEP 5 — Open the Frontend
+══════════════════════════════════════════════════════════════════════════════
+
+  Double-click or open in your browser:
+      frontend/index.html
+
+  HOW TO USE:
+  ───────────
+  1. Select a target ISO standard from the dropdown:
+       • ISO 37001 — Anti-bribery Management Systems
+       • ISO 37002 — Whistleblowing Management Systems
+       • ISO 37301 — Compliance Management Systems
+       • ISO 37000 — Governance of Organizations
+
+  2. Drag and drop (or click to browse) your company policy PDFs:
+       e.g. Infosys Corporate Governance Report.pdf
+            Tata Code Of Conduct.pdf
+            Anti-Bribery and Anti-Corruption Policy (Tata).pdf
+            Infosys Whistleblower Policy.pdf
+
+  3. Click "Generate Assessment"
+     → The AI will process all documents (takes 1–3 minutes per standard)
+
+  4. You land on the Dashboard showing:
+       • Overall Maturity Score  (0–100%)
+       • Radar chart across compliance pillars
+       • Compliant / Partially Compliant / Non-Compliant counts
+       • The Auditor Workbench table with:
+           – ISO clause reference (e.g. ISO 37001 § 8.6)
+           – Company document citation (filename, page, section heading)
+           – Verbatim excerpt from the uploaded document
+           – GAP description and actionable Recommendation
+
+  5. Click "Export Report" to download a plain-text audit summary.
+
+
+══════════════════════════════════════════════════════════════════════════════
+ DEMO MODE  (No backend required — for offline presentations)
+══════════════════════════════════════════════════════════════════════════════
+
+  If the backend server is NOT running, the app automatically switches to
+  Demo Mode: it shows a rich pre-populated sample assessment using Tata and
+  Infosys document citations so you can present the UI without a live server.
+
+  Just open frontend/index.html, select any standard, upload any file,
+  and click "Generate Assessment".
+
+
+══════════════════════════════════════════════════════════════════════════════
+ ADDING MORE COMPANY DOCUMENTS
+══════════════════════════════════════════════════════════════════════════════
+
+  Simply upload them on the intake screen — no backend changes needed.
+  The system accepts PDF and DOCX files up to 20 MB each.
+
+
+══════════════════════════════════════════════════════════════════════════════
+ ADDING MORE ISO STANDARDS
+══════════════════════════════════════════════════════════════════════════════
+
+  1. Copy the new ISO PDF into:   backend/knowledge_base/
+  2. Re-run:                      python knowledge_base_loader.py
+  3. Add a new checklist entry in backend/services/rag_engine.py
+     under ISO_CHECKLISTS and ISO_NAME_MAP
+  4. Add a new <option> in frontend/index.html dropdown
+
+
+══════════════════════════════════════════════════════════════════════════════
+ TROUBLESHOOTING
+══════════════════════════════════════════════════════════════════════════════
+
+  Problem: "GOOGLE_API_KEY is missing"
+  Fix:     Open backend/.env and make sure GOOGLE_API_KEY=... is set.
+
+  Problem: "Collection not found" on first run
+  Fix:     Run python knowledge_base_loader.py first (Step 3).
+
+  Problem: Dashboard shows no data / Demo Mode always active
+  Fix:     Make sure the backend server (python main.py) is running on
+           port 8000 BEFORE opening the frontend.
+
+  Problem: CORS errors in browser console
+  Fix:     The backend already has CORS configured for all origins.
+           Ensure you are accessing via file:// and backend is on :8000.
+
+
+══════════════════════════════════════════════════════════════════════════════
+ SUPPORTED ISO STANDARDS IN KNOWLEDGE BASE
+══════════════════════════════════════════════════════════════════════════════
+
+  File                        Standard
+  ──────────────────────────  ─────────────────────────────────────────────
+  ISO-37001.pdf               ISO 37001:2016  Anti-bribery Management
+  ISO-37002-2021.pdf          ISO 37002:2021  Whistleblowing Management
+  ISO-37301-2021.pdf          ISO 37301:2021  Compliance Management
+  ISO-37000-2021.pdf          ISO 37000:2021  Governance of Organizations
+
+  Total normative clauses assessed:  20 + 18 + 17 + 14 = 69 clauses
+
+
+══════════════════════════════════════════════════════════════════════════════
+ QUICK COMMAND REFERENCE
+══════════════════════════════════════════════════════════════════════════════
+
+  # Navigate to backend folder first
+  cd path/to/Anupalan_Mitra/backend
+
+  # Install (once)
+  pip install -r requirements.txt
+
+  # Index ISO PDFs (once, or after adding new PDFs)
+  python knowledge_base_loader.py
+
+  # Start the server
+  python main.py
+
+  # Then open in browser:
+  frontend/index.html
+
+
+══════════════════════════════════════════════════════════════════════════════
+ PROJECT: Anupalan Mitra  |  Deloitte Hackathon — Strategy, Risk & Transactions
+══════════════════════════════════════════════════════════════════════════════

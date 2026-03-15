@@ -1,0 +1,10 @@
+# NEVER push your API keys to version control
+.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+temp/
