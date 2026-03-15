@@ -6,25 +6,25 @@
   <title>Anupalan Mitra | ISO Compliance Intelligence</title>
   <meta name="description" content="Big4-grade ISO compliance assessment platform. Upload company documents and get an instant readiness report.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:          #0a0e1a;
-      --bg2:         #0f1526;
-      --card:        rgba(255,255,255,0.04);
-      --border:      rgba(255,255,255,0.09);
-      --accent:      #3b82f6;
-      --accent2:     #8b5cf6;
-      --green:       #22c55e;
-      --amber:       #f59e0b;
-      --red:         #ef4444;
-      --text:        #f1f5f9;
-      --muted:       #64748b;
-      --radius:      14px;
+      --bg:          #0B0F19; /* Tinted deep blue instead of stark blue-black */
+      --bg2:         #121826;
+      --card:        rgba(255,255,255,0.02);
+      --border:      rgba(255,255,255,0.06);
+      --accent:      #1D4ED8; /* Deep rich blue */
+      --accent2:     #6366f1; /* Indigo */
+      --green:       #16a34a;
+      --amber:       #d97706;
+      --red:         #dc2626;
+      --text:        #f8fafc;
+      --muted:       #94a3b8;
+      --radius:      16px;
     }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      font-family: 'Inter', system-ui, sans-serif;
+      font-family: 'Outfit', system-ui, sans-serif;
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
@@ -77,12 +77,12 @@
       padding: 5px 14px; border-radius: 20px; margin-bottom: 22px;
     }
     .hero h1 {
-      font-size: clamp(2.2rem, 5vw, 3.4rem); font-weight: 800;
-      line-height: 1.18; letter-spacing: -0.03em;
-      margin-bottom: 18px;
+      font-size: clamp(2.4rem, 5vw, 3.8rem); font-weight: 800;
+      line-height: 1.1; letter-spacing: -0.04em;
+      margin-bottom: 22px;
+      color: #fff;
     }
-    .gradient { background: linear-gradient(135deg, #60a5fa, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-    .hero p { font-size: 1.05rem; color: var(--muted); max-width: 620px; margin: 0 auto; line-height: 1.65; }
+    .hero p { font-size: 1.15rem; color: var(--muted); max-width: 660px; margin: 0 auto; line-height: 1.6; font-weight: 300; }
 
     /* ── Steps strip ── */
     .steps {
@@ -109,7 +109,8 @@
     /* ── Card ── */
     .card {
       background: var(--card); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 32px;
+      border-radius: var(--radius); padding: 36px;
+      box-shadow: 0 4px 24px -4px rgba(0,0,0,0.2), 0 0 1px 0 rgba(255,255,255,0.05) inset;
     }
     .section-label {
       font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
@@ -136,14 +137,14 @@
       border-color: var(--accent); background: rgba(59,130,246,0.08);
     }
     .fw-icon {
-      width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
-      background: rgba(59,130,246,0.1);
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.15rem;
+      background: rgba(29,78,216,0.15); /* Tinted accent */
     }
     .fw-info { flex: 1; }
-    .fw-code { font-size: 0.8rem; font-weight: 700; color: #93c5fd; }
-    .fw-name { font-size: 0.82rem; color: var(--text); font-weight: 500; margin-top: 1px; }
-    .fw-desc { font-size: 0.74rem; color: var(--muted); margin-top: 3px; }
+    .fw-code { font-size: 0.85rem; font-weight: 700; color: #bfdbfe; letter-spacing: 0.02em; }
+    .fw-name { font-size: 0.88rem; color: var(--text); font-weight: 500; margin-top: 2px; }
+    .fw-desc { font-size: 0.8rem; color: var(--muted); margin-top: 4px; font-weight: 300; }
 
     /* ── Divider ── */
     .divider { height: 1px; background: var(--border); margin: 28px 0; }
@@ -200,15 +201,21 @@
 
     /* ── Run button ── */
     .run-btn {
-      width: 100%; margin-top: 28px; padding: 16px;
-      font-size: 1rem; font-weight: 700; letter-spacing: 0.01em;
-      border: none; border-radius: 10px; cursor: pointer;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color: white; transition: all 0.2s;
+      width: 100%; margin-top: 32px; padding: 18px;
+      font-size: 1.05rem; font-weight: 700; letter-spacing: 0.02em;
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; cursor: pointer;
+      background: var(--accent);
+      color: white; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       display: flex; align-items: center; justify-content: center; gap: 10px;
+      box-shadow: 0 4px 14px 0 rgba(29, 78, 216, 0.39);
     }
-    .run-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); box-shadow: 0 8px 30px rgba(59,130,246,0.35); }
-    .run-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+    .run-btn:hover:not(:disabled) { 
+      background: #2563EB; /* Slightly lighter shade for hover */
+      transform: translateY(-2px); 
+      box-shadow: 0 6px 20px rgba(29, 78, 216, 0.23); 
+    }
+    .run-btn:active:not(:disabled) { transform: translateY(1px); }
+    .run-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; box-shadow: none; background: var(--border); border-color: transparent;}
 
     /* ── Loading overlay ── */
     .loading {

@@ -4,3 +4,6 @@ __pycache__/
 *.pyc
 .DS_Store
 backend/chroma_db/
+.agents/
+video_script.txt
+videoscripts.txt
